@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Entity Co-occurrence Graph</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force-Directed Graph</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
-        /* Add styles for your graph here */
+        /* Add your CSS styling here, if needed */
     </style>
-    <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 
 <body>
-    <div id="graph"></div>
-    <script src="script.js"></script>
+    <div id="graph-container">
+        <svg id="graph-svg"></svg>
+    </div>
+
+    <script src="scripts.js"></script>
 </body>
 
 </html>

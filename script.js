@@ -1,20 +1,27 @@
+document.addEventListener("DOMContentLoaded", function() {
+    createForceDirectedGraph();
+});
+
 async function createForceDirectedGraph() {
-    const graphContainer = d3.select("#graph");
     const width = 800; // Adjust as needed
     const height = 600; // Adjust as needed
 
+    // Fetch data from your server
     const response = await fetch('/get_entity_network');
     const graph = await response.json();
-
-    const svg = graphContainer.append("svg")
+    console.log(graph); // Check the structure of the received data
+    // Create an SVG container for the graph
+    const svg = d3.select("#graph-svg")
         .attr("width", width)
         .attr("height", height);
 
+    // Create a D3 force simulation
     const simulation = d3.forceSimulation(graph.nodes)
         .force("link", d3.forceLink(graph.links).id(d => d.id))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
 
+    // Create lines for links
     const link = svg.append("g")
         .attr("stroke", "#999")
         .attr("stroke-opacity", 0.6)
@@ -23,6 +30,7 @@ async function createForceDirectedGraph() {
         .join("line")
         .attr("stroke-width", d => Math.sqrt(d.value));
 
+    // Create circles for nodes
     const node = svg.append("g")
         .attr("stroke", "#fff")
         .attr("stroke-width", 1.5)
@@ -30,12 +38,14 @@ async function createForceDirectedGraph() {
         .data(graph.nodes)
         .join("circle")
         .attr("r", 5) // Radius of nodes
-        .attr("fill", colorNode) // Add a function to color nodes if needed
+        .attr("fill", colorNode) // You can define a color function if needed
         .call(drag(simulation));
 
+    // Add tooltips to nodes
     node.append("title")
         .text(d => d.id);
 
+    // Update positions of nodes and links in the simulation's tick event
     simulation.on("tick", () => {
         link
             .attr("x1", d => d.source.x)
@@ -48,6 +58,7 @@ async function createForceDirectedGraph() {
             .attr("cy", d => d.y);
     });
 
+    // Define drag behavior for nodes
     function drag(simulation) {
         function dragstarted(event, d) {
             if (!event.active) simulation.alphaTarget(0.3).restart();
@@ -71,6 +82,10 @@ async function createForceDirectedGraph() {
             .on("drag", dragged)
             .on("end", dragended);
     }
-}
 
-createForceDirectedGraph();
+    // Function to define node colors (customize as needed)
+    function colorNode(d) {
+        // Add logic to assign colors based on your requirements
+        return "steelblue";
+    }
+}
