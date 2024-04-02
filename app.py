@@ -1,53 +1,60 @@
+import json
 from flask import Flask, jsonify
 import spacy
+#import certifi
+#from convokit import Corpus, download
+from flask_cors import CORS
 import os
-import certifi
-from convokit import Corpus, download
+from flask import render_template
 
-os.environ['SSL_CERT_FILE'] = certifi.where()
-
-
-# corpus = Corpus(filename=download("movie-corpus"))
-corpus = Corpus(filename="/Users/wajeeh/.convokit/downloads/movie-corpus")
-
-
+# Run the main.ipynb before running this file 
 
 app = Flask(__name__)
+CORS(app)
 
-# python -m spacy download en_core_web_sm 
-# Load spaCy model
-nlp = spacy.load("en_core_web_sm")
 
 @app.route('/get_entity_network', methods=['GET'])
 def get_entity_network():
-    # Using a dictionary to track co-occurrence
-    co_occurrence = {}
+    file_path2 = os.path.join(os.path.dirname(__file__), 'entity_network.json')
+    # Read data from the JSON file
+    with open(file_path2, 'r') as f:
+        data = json.load(f)
+    return jsonify(data)
 
-    for utterance in list(corpus.iter_utterances())[:10000]:
-        doc = nlp(utterance.text)
-        entities = [ent.text for ent in doc.ents if ent.label_ in ['PERSON', 'ORG', 'GPE']]  # Filter entities if needed
-        for i, entity in enumerate(entities):
-            for adjacent in entities[i + 1:]:
-                if entity != adjacent:
-                    pair = tuple(sorted([entity, adjacent]))
-                    co_occurrence[pair] = co_occurrence.get(pair, 0) + 1
 
-    # Preparing nodes and links for D3
-    nodes = list({entity for pair in co_occurrence for entity in pair})
-    links = [{"source": pair[0], "target": pair[1], "value": count} for pair, count in co_occurrence.items()]
 
-    return jsonify({"nodes": [{"id": node} for node in nodes], "links": links})
+# Define a route to serve the JSON data
+@app.route("/topics_data")
+def get_topics_data():
+    file_path1 = os.path.join(os.path.dirname(__file__), 'topics_data.json')
+    with open(file_path1, "r") as json_file:
+        data = json.load(json_file)
+    return jsonify(data)
 
+@app.route('/get_radial_network_data')
+def get_radial_network_data():
+    file_path = os.path.join(os.path.dirname(__file__), 'radial_network_data.json')
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+    return jsonify(data)
+
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/force')
+def force():
+    return render_template('force.html')
+
+@app.route('/bubble')
+def bubble():
+    return render_template('bubble.html')
+
+@app.route('/network')
+def network():
+    return render_template('network.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Chart</title>
+    <style>
+        body {
+            color: #fff;
+            background-color: #000;
+        }
+        h1 {
+            text-align: center;
+        }
+        #chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: start; /* Align items to the start of the container */
+        }
+        #chart-svg {
+            width: 80%;
+            height: 850px;
+        }
+        .bubble {
+            opacity: 0.7;
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+        #tooltip {
+            position: absolute;
+            display: none;
+            background-color: #f9f9f9;
+            border: 1px solid #d4d4d4;
+            border-radius: 3px;
+            padding: 10px;
+            color: #333;
+            font-size: 12px;
+        }
+        #text-box {
+            /* Removed fixed width to allow box to fit its content */
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid #fff;
+            color: #fff;
+            background-color: #333;
+        }
+        .selection {
+            stroke: #fff;
+            fill-opacity: 0.2;
+            shape-rendering: crispEdges;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Bubble Chart</h1>
+
+<div id="chart-container">
+    <svg id="chart-svg"></svg>
+    <div id="text-box">
+        <h2>Why Bubble Chart for NLP Data Visualization?</h2>
+        <ul>
+            <li>Visual Clarity in Grouping</li>
+            <li>Size Representation</li>
+            <li>Color Coding</li>
+            <li>Spatial Efficiency</li>
+            <li>Aesthetically Pleasing</li>
+        </ul>
+    </div>
+</div>
+
+<div id="tooltip"></div>
+
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script>
+    // Existing JavaScript code
+    // ...
+
+    d3.json("/topics_data").then(function(data) {
+        // Existing chart rendering code
+        // ...
+
+        // Define a brush
+        const brush = d3.brush()
+            .extent([[0, 0], [width, height]])
+            .on("start brush", brushed)
+            .on("end", brushended);
+
+        // Add the brush to the svg
+        svg.append("g")
+            .attr("class", "brush")
+            .call(brush);
+
+        function brushed({selection}) {
+            if (!selection) return;
+
+            const [[x0, y0], [x1, y1]] = selection;
+
+            bubbles.classed("selected", d => {
+                return x0 <= d.x && d.x <= x1 && y0 <= d.y && d.y <= y1;
+            });
+
+            // Handle the selected bubbles as per your requirement
+            // For example, log selected bubble IDs
+            const selectedBubbles = bubbles.filter(".selected").data();
+            console.log(selectedBubbles.map(d => d.data.topic_id));
+        }
+
+        function brushended({selection}) {
+            if (!selection) {
+                bubbles.classed("selected", false);
+            }
+        }
+    }).catch(function(error) {
+        console.log(error);
+    });
+</script>
+
+</body>
+</html>

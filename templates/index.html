@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Dashboard - A Project By Encommpassed.ai</title>
+    <style>
+        /* Updated styling for a dynamic, dark-themed dashboard */
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background */
+            color: #f5f5f5; /* Light text */
+        }
+        .brush .selection {
+            fill: blue;
+            fill-opacity: 0.3;
+        }
+        .bubble.selected {
+    stroke: black;
+    stroke-width: 2px;
+}
+
+        header {
+            background-color: #444; /* Dark header */
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 28px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: start; /* Align to start for better layout with text boxes */
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+
+        .widget {
+            background-color: #282828; /* Dark widget background */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            padding: 30px;
+            width: 600px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .brush .selection {
+    fill: blue;
+    fill-opacity: 0.3;
+}
+        .widget h2 {
+            margin-bottom: 20px;
+            font-size: 32px;
+            color: #ddd; /* Lighter text for headers */
+            cursor: pointer; /* Make it look clickable */
+        }
+
+        /* Dynamic text box styling */
+        .text-box {
+            background-color: #333;
+            color: #fff;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            width: 250px;
+        }
+
+        /* Visualization styles */
+        #graph-svg, #chart-svg, #network-graph-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .tooltip {
+            position: absolute;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border-radius: 5px;
+            pointer-events: none;
+            z-index: 999;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Data Visualization Project - By Encommpassed.ai</h1>
+    </header>
+
+    <div class="container">
+        <!-- Forced Directed Graph Widget -->
+        <div class="widget">
+            <h2 onclick="window.location.href='/force'">Forced Directed Graph</h2>
+            <svg id="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="text-box">
+                A force-directed graph visually represents linguistic data relationships, enhancing NLP analysis through intuitive, dynamic network layouts. </div>
+        </div>
+
+        <!-- Bubble Chart Widget -->
+        <div class="widget">
+            <h2 onclick="window.location.href='/bubble'">Bubble Graph</h2>
+            <svg id="chart-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="text-box">
+                Bubble charts depict data with varying-sized circles, offering clear, size-based comparisons in NLP datasets.</div>
+        </div>
+
+        <!-- Network Graph Widget -->
+        <div class="widget">
+            <h2 onclick="window.location.href='/network'">Network Graph</h2>
+            <svg id="network-graph-svg" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div class="text-box">
+                Network graphs illustrate connections between entities, aiding in the analysis and visualization of NLP relational data.</div>
+        </div>
+
+        <div class="tooltip" id="tooltip"></div>
+    </div>
+
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="static/forced_directed.js"></script>
+    <script src="static/network_graph.js"></script>
+    <script src="static/bubble_chart.js"></script>
+    <script>
+        // Your existing JavaScript code
+        const graphs = document.querySelectorAll('svg');
+        graphs.forEach(graph => {
+            graph.setAttribute('width', '800');
+            graph.setAttribute('height', '600');
+        });
+        
+    </script>
+</body>
+</html>
