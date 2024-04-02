@@ -31,3 +31,6 @@ This project is open to contributions. If you have ideas or improvements, feel f
 
 ## WARNING
 The web application of the project is unoptimized right now. Lags are expected. To view the graphs seamlessly, open induvisual JS files for each. 
+
+## Licence 
+This project is licensed under the [MIT License](https://opensource.org/license/MIT)- see the LICENSE file for details.
